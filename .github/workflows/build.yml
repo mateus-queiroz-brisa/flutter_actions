@@ -34,7 +34,7 @@ jobs:
         VERSION=$(grep version pubspec.yaml | tail -1 | cut -d ":" -f 2 | xargs)
         PACKAGE=$(cd android/app/src/main && grep package AndroidManifest.xml | tail -1 | cut -d '"' -f 4)
         echo ${PACKAGE}-${VERSION}
-        flutter build apk --release run --flavor homo -t lib/main_homo.dart
+        flutter build apk --release
         cd build/app/outputs/flutter-apk/
         mv app-homo-release.apk ${PACKAGE}-${VERSION}.apk
         echo "::set-output name=filename::${PACKAGE}-${VERSION}.apk"
