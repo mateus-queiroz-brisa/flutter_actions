@@ -36,7 +36,7 @@ jobs:
         echo ${PACKAGE}-${VERSION}
         flutter build apk --release
         cd build/app/outputs/flutter-apk/
-        mv app-homo-release.apk ${PACKAGE}-${VERSION}.apk
+        mv app-release.apk ${PACKAGE}-${VERSION}.apk
         echo "::set-output name=filename::${PACKAGE}-${VERSION}.apk"
 
     - name: Upload to Releases
