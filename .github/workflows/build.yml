@@ -37,19 +37,21 @@ jobs:
         flutter build apk --release
 
     - name: Upload APK to Github Artifacts
+      if: startsWith(github.ref, 'refs/heads/release/') || github.ref == 'refs/heads/main'
       uses: actions/upload-artifact@v1
       with:
           name: app
           path: build/app/outputs/flutter-apk/app-release.apk   
 
     - name: Create Release
+      if: startsWith(github.ref, 'refs/heads/release/') || github.ref == 'refs/heads/main'
       id: create_release
       uses: actions/create-release@v1
       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-          tag_name: newtag
-          release_name: Automatic Release
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
           draft: false
           prerelease: false      
 
