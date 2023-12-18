@@ -56,8 +56,14 @@ jobs:
     - name: Upload to Releases
       if: startsWith(github.ref, 'refs/heads/release/') || github.ref == 'refs/heads/main'
       uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: build/app/outputs/flutter-apk/${{ needs.build.outputs.filename }}
-        asset_name: ${{ needs.build.outputs.filename }}
-        tag: ${{ github.ref }}
+        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+        asset_path: ./build/outputs/apk/debug/app-release.apk
+        asset_name: app-release.apk
+        asset_content_type: application/zip
+        # repo_token: ${{ secrets.GITHUB_TOKEN }}
+        # file: build/app/outputs/flutter-apk/${{ needs.build.outputs.filename }}
+        # asset_name: ${{ needs.build.outputs.filename }}
+        # tag: ${{ github.ref }}
