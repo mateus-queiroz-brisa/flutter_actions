@@ -32,10 +32,11 @@ jobs:
       if: startsWith(github.ref, 'refs/heads/release/') || github.ref == 'refs/heads/main'
       run: |
         VERSION=$(grep version pubspec.yaml | tail -1 | cut -d ":" -f 2 | xargs)
-        PACKAGE=$(cd android/app/src/main && grep package AndroidManifest.xml | tail -1 | cut -d '"' -f 4)
-        echo ${PACKAGE}-${VERSION}
+        PACKAGE=$(grep package android/app/src/main/AndroidManifest.xml | cut -d '"' -f 2)
         flutter build apk --release
-        mv build/app/outputs/flutter-apk/app-release.apk "${PACKAGE}-${VERSION}.apk"
+        APK_PATH=$(find build/app/outputs/flutter-apk/ -name '*.apk' -print -quit)
+        mv "$APK_PATH" "${PACKAGE}-${VERSION}.apk"
+
 
     - name: Upload to Releases
       if: startsWith(github.ref, 'refs/heads/release/') || github.ref == 'refs/heads/main'
