@@ -32,9 +32,26 @@ jobs:
       if: startsWith(github.ref, 'refs/heads/release/') || github.ref == 'refs/heads/main'
       run: |
         VERSION=$(grep version pubspec.yaml | tail -1 | cut -d ":" -f 2 | xargs)
-        PACKAGE=$(grep package android/app/src/main/AndroidManifest.xml | cut -d '"' -f 2)
+        PACKAGE=$(cd android/app/src/main && grep package AndroidManifest.xml | tail -1 | cut -d '"' -f 4)
+        echo ${PACKAGE}-${VERSION}
         flutter build apk --release
 
+    - name: Upload APK to Github Artifacts
+      uses: actions/upload-artifact@v1
+      with:
+          name: app
+          path: build/app/outputs/flutter-apk/app-release.apk   
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN_RELEASE }}
+      with:
+          tag_name: newtag
+          release_name: Automatic Release
+          draft: false
+          prerelease: false      
 
     - name: Upload to Releases
       if: startsWith(github.ref, 'refs/heads/release/') || github.ref == 'refs/heads/main'
