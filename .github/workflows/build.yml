@@ -2,70 +2,101 @@ name: Flutter CI/CD
 
 on:
   pull_request:
+    branches:
+      - '**'
   push:
     branches:
-      - main
       - 'release/*'
+      - main
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v2
+      - name: Checkout Repository
+        uses: actions/checkout@v2
 
-    - name: Set up Flutter
-      uses: subosito/flutter-action@v2
-      # with:
-      #   flutter-version: '2.8.1'
+      - name: Set up Java   
+        uses: actions/setup-java@v2
+        with:
+          java-version: '12.x'
 
-    - name: Install Dependencies
-      run: flutter pub get
+      - name: Set up Flutter    
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '2.8.1'
 
-    - name: Run Tests and Analyze
-      run: |
-        flutter test
-        flutter analyze
+      - name: Install Dependencies
+        run: flutter pub get
 
-    - name: Build and Upload APK
-      if: startsWith(github.ref, 'refs/heads/release/') || github.ref == 'refs/heads/main'
-      run: |
-        VERSION=$(grep version pubspec.yaml | tail -1 | cut -d ":" -f 2 | xargs)
-        PACKAGE=$(cd android/app/src/main && grep package AndroidManifest.xml | tail -1 | cut -d '"' -f 4)
-        echo ${PACKAGE}-${VERSION}
-        flutter build apk --release
+      - name: Run Tests
+        run: flutter test
 
-    - name: Upload APK to Github Artifacts
-      if: startsWith(github.ref, 'refs/heads/release/') || github.ref == 'refs/heads/main'
-      uses: actions/upload-artifact@v1
-      with:
-          name: app
-          path: build/app/outputs/flutter-apk/app-release.apk   
+      - name: Analyze Code
+        run: flutter analyze
 
-    - name: Create Release
-      if: startsWith(github.ref, 'refs/heads/release/') || github.ref == 'refs/heads/main'
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
-          draft: false
-          prerelease: false      
 
-    - name: Upload to Releases
-      if: startsWith(github.ref, 'refs/heads/release/') || github.ref == 'refs/heads/main'
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-        asset_path: build/app/outputs/flutter-apk/app-release.apk
-        asset_name: app-release.apk
-        asset_content_type: application/zip
-        # repo_token: ${{ secrets.GITHUB_TOKEN }}
-        # file: build/app/outputs/flutter-apk/${{ needs.build.outputs.filename }}
-        # asset_name: ${{ needs.build.outputs.filename }}
-        # tag: ${{ github.ref }}
+
+
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#     - name: Checkout Repository
+#       uses: actions/checkout@v2
+
+#     - name: Set up Flutter
+#       uses: subosito/flutter-action@v2
+#       # with:
+#       #   flutter-version: '2.8.1'
+
+#     - name: Install Dependencies
+#       run: flutter pub get
+
+#     - name: Run Tests and Analyze
+#       run: |
+#         flutter test
+#         flutter analyze
+
+#     - name: Build and Upload APK
+#       if: startsWith(github.ref, 'refs/heads/release/') || github.ref == 'refs/heads/main'
+#       run: |
+#         VERSION=$(grep version pubspec.yaml | tail -1 | cut -d ":" -f 2 | xargs)
+#         PACKAGE=$(cd android/app/src/main && grep package AndroidManifest.xml | tail -1 | cut -d '"' -f 4)
+#         echo ${PACKAGE}-${VERSION}
+#         flutter build apk --release
+
+#     - name: Upload APK to Github Artifacts
+#       if: startsWith(github.ref, 'refs/heads/release/') || github.ref == 'refs/heads/main'
+#       uses: actions/upload-artifact@v1
+#       with:
+#           name: app
+#           path: build/app/outputs/flutter-apk/app-release.apk   
+
+#     - name: Create Release
+#       if: startsWith(github.ref, 'refs/heads/release/') || github.ref == 'refs/heads/main'
+#       id: create_release
+#       uses: actions/create-release@v1
+#       env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#       with:
+#           tag_name: newtag
+#           release_name: Automatic Release
+#           draft: false
+#           prerelease: false      
+
+#     - name: Upload to Releases
+#       if: startsWith(github.ref, 'refs/heads/release/') || github.ref == 'refs/heads/main'
+#       uses: actions/upload-release-asset@v1
+#       env:
+#         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#       with:
+#         upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+#         asset_path: build/app/outputs/flutter-apk/app-release.apk
+#         asset_name: app-release.apk
+#         asset_content_type: application/zip
+#         # repo_token: ${{ secrets.GITHUB_TOKEN }}
+#         # file: build/app/outputs/flutter-apk/${{ needs.build.outputs.filename }}
+#         # asset_name: ${{ needs.build.outputs.filename }}
+#         # tag: ${{ github.ref }}
