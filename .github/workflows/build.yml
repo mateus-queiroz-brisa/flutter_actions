@@ -29,7 +29,7 @@ jobs:
       - name: Analyze Code
         run: flutter analyze
   build_release:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/release/*'
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
 
