@@ -30,7 +30,7 @@ jobs:
         run: flutter analyze
   build_release:
     if: |
-      ${{ github.ref == 'refs/heads/release' }}
+      ${{ github.event_name == 'push' && github.ref == 'refs/heads/release' }}
     runs-on: ubuntu-latest
     steps:
 
