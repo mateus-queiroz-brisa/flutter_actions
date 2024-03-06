@@ -49,8 +49,6 @@ jobs:
         uses: actions/github-script@v5
         with:
           script: |
-            const fs = require('fs');
-            const path = require('path');
             const { owner, repo } = context.repo;
             const branch = context.ref.replace('refs/heads/', '');
             const commits = await github.rest.repos.listCommits({
@@ -58,13 +56,11 @@ jobs:
             repo,
             sha: branch,
             });
-            const commitMessages = commits.data.map(commit => `- ${commit.commit.message}`).join('\n');
-            const tempFilePath = path.join(process.env.RUNNER_TEMP, 'commits.txt');
-            fs.writeFileSync(tempFilePath, commitMessages);
-            return tempFilePath;
+            const commitMessages = commits.data.map(commit => `- [${commit.sha}](https://github.com/${owner}/${repo}/commit/${commit.sha}): ${commit.commit.message}`).join('\n');
+            return `Commits:\n${commitMessages}`;
 
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v1
+      # - name: Set up Flutter
+      #   uses: subosito/flutter-action@v1
 
       - name: Install Dependencies
         run: flutter pub get
