@@ -31,7 +31,7 @@ jobs:
   build_release:
     if: |
       github.event_name == 'push' &&
-      github.head_ref == 'release/*'
+      github.head_ref == 'release'
     runs-on: ubuntu-latest
     steps:
 
