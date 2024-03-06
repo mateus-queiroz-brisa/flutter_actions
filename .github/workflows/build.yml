@@ -45,7 +45,7 @@ jobs:
 
       - name: Build APK
         run: |
-          VERSION=$(grep version pubspec.yaml | tail -1 | cut -d ":" -f 2 | xargs)
+          VERSION=$(grep version: pubspec.yaml | tail -1 | cut -d ":" -f 2 | xargs)
           PACKAGE=$(cd android/app && grep applicationId build.gradle | tail -1 | cut -d '"' -f 2)
           echo "VERSION=$VERSION" >> $GITHUB_ENV
           echo "PACKAGE=$PACKAGE" >> $GITHUB_ENV
