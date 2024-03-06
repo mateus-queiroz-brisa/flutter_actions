@@ -29,7 +29,8 @@ jobs:
       - name: Analyze Code
         run: flutter analyze
   build_release:
-    if: ${{ github.ref == 'refs/heads/release' }}
+    if: |
+      ${{ github.ref == 'refs/heads/release' }}
     runs-on: ubuntu-latest
     steps:
 
