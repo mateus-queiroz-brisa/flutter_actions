@@ -44,9 +44,6 @@ jobs:
         with:
           node-version: '14'
 
-      # - name: Install Dependencies
-      #   run: npm ci
-
       - name: Get commits
         id: get_commits
         uses: actions/github-script@v5
@@ -59,8 +56,8 @@ jobs:
               repo,
               sha: branch,
             });
-            const commitMessages = commits.data.map(commit => `${commit.commit.message}`).join('\n');
-            return commitMessages;
+            const commitMessages = commits.data.map(commit => `- ${commit.commit.message}`).join('\n');
+            return `Commits:\n${commitMessages}`;
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v1
