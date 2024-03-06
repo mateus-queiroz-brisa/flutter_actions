@@ -30,7 +30,7 @@ jobs:
         run: flutter analyze
   build_release:
     if: |
-      ${{ github.event_name == 'push' && github.ref == 'refs/heads/release/*' }}
+      github.event_name == 'push' && startsWith(github.ref, 'refs/heads/release/')
     runs-on: ubuntu-latest
     steps:
 
@@ -82,7 +82,7 @@ jobs:
 
   build_master:
     if: |
-      ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
+      github.event_name == 'push' && startsWith(github.ref, 'refs/heads/main')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
