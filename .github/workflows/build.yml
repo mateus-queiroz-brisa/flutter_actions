@@ -92,7 +92,7 @@ jobs:
         with:
           tag_name: ${{ steps.get_short_sha.outputs.sha }}
           release_name: Release ${{ github.ref }}
-          body: ${{ fromJSON(steps.get_commits.outputs.result).body }}
+          body: ${{ fromJSON(steps.get_commits.outputs.result) }}
           draft: false
           prerelease: true
 
