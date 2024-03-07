@@ -55,7 +55,7 @@ jobs:
           fi
 
       - name: Comment on PR if any step failed
-        if: steps.check_failures.outputs.failed == 'true'
+        if: needs.checkout_and_test.outputs.failed == 'true'
         uses: actions/github-script@v5
         with:
           script: |
