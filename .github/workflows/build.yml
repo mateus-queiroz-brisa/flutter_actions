@@ -56,7 +56,7 @@ jobs:
             repo,
             sha: branch,
             });
-            const commitMessages = commits.data.map(commit => `- [${commit.sha}](https://github.com/${owner}/${repo}/commit/${commit.sha}): ${commit.commit.message} by ${commit.commit.author.name}`).join('\n');
+            const commitMessages = commits.data.map(commit => `- [${commit.sha}](https://github.com/${owner}/${repo}/commit/${commit.sha}): ${commit.commit.message}`).join('\n');
             return `Commits:\n${commitMessages}`;
             
       - name: Get short commit SHA
