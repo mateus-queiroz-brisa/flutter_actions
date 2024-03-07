@@ -21,52 +21,13 @@ jobs:
         uses: subosito/flutter-action@v2
 
       - name: Install Dependencies
-        id: install_dependencies
         run: flutter pub get
-        continue-on-error: true
 
       - name: Run Tests
-        id: run_tests
         run: flutter test
-        continue-on-error: true
 
       - name: Analyze Code
-        id: analyze_code
         run: flutter analyze
-        continue-on-error: true
-
-  conclusion_checkout_and_test:
-    needs: checkout_and_test   
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check for failures
-        id: check_failures
-        run: |
-          echo "::set-output name=failed::false"
-          if [ "${{ needs.checkout_and_test.steps.install_dependencies.outcome }}" != "success" ]; then
-            echo "::set-output name=failed::true"
-            echo "::set-output name=error_message::Install Dependencies failed."
-          elif [ "${{ needs.checkout_and_test.steps.run_tests.outcome }}" != "success" ]; then
-            echo "::set-output name=failed::true"
-            echo "::set-output name=error_message::Run Tests failed."
-          elif [ "${{ needs.checkout_and_test.steps.analyze_code.outcome }}" != "success" ]; then
-            echo "::set-output name=failed::true"
-            echo "::set-output name=error_message::Analyze Code failed."
-          fi
-
-      - name: Comment on PR if any step failed
-        if: needs.checkout_and_test.outputs.failed != 'true'
-        uses: actions/github-script@v5
-        with:
-          script: |
-            const issue_number = context.issue.number;
-            const message = `One or more steps failed. ${steps.check_failures.outputs.error_message} Please check the logs for details.`;
-            github.issues.createComment({
-              issue_number: issue_number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: message
-            });
 
 
   build_release:
