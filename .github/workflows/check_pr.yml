@@ -1,4 +1,4 @@
-name: Checkout and Test
+name: 'Checkout and Test'
 
 on:
  pull_request:
