@@ -20,7 +20,23 @@ jobs:
         run: flutter pub get
 
       - name: Run Tests
-        run: flutter test
+        run: flutter test --coverage
+
+      - name: Active Flutter Cov Console
+        run: flutter pub global activate flutter_cov
+
+      - name: Run Flutter Cov Console
+        id: flutter_cov
+        run: flutter pub global run test_cov_console
+
+      - name: Add Coverage
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          number: ${{ github.event.pull_request.number }}
+          header: coverage
+          message: ${{ steps.flutter_cov.outputs.result }}
+
 
       - name: Analyze Code
         run: flutter analyze
