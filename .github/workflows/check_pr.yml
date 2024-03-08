@@ -24,6 +24,14 @@ jobs:
 
       - name: Setup LCOV
         uses: hrishikesh-kadam/setup-lcov@v1
+        
+      - name: List Coverage Files
+        run: ls -la ./coverage
+  
+
+      - name: Generate HTML Coverage Report
+        run: |
+          genhtml ./coverage/lcov.info --output-directory ./coverage/html  
 
       - name: Report code coverage
         uses: zgosalvez/github-actions-report-lcov@v4.1.2
