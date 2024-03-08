@@ -22,10 +22,10 @@ jobs:
       - name: Run Tests
         run: flutter test --coverage
 
-      - name: Active Flutter Cov Console
-        run: flutter pub global activate flutter_cov_console
+      - name: Active Test Cov Console
+        run: flutter pub global activate test_cov_console
 
-      - name: Run Flutter Cov Console
+      - name: Run Test Cov Console
         id: flutter_cov
         run: flutter pub global run test_cov_console
 
