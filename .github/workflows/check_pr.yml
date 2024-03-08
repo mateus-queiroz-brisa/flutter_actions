@@ -35,8 +35,8 @@ jobs:
       - name: Add Coverage
         uses: marocchino/sticky-pull-request-comment@v2
         with:
-          number: ${{ github.event.pull_request.number }}
-          header: coverage
+          # number: ${{ github.event.pull_request.number }}
+          # header: coverage
           message: ${{ steps.flutter_cov.outputs.result }}
 
 
