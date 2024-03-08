@@ -12,16 +12,16 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Setup Ruby
-        uses: ruby/setup-ruby@v1
+      - name: Setup Dart
+        uses: dart-lang/setup-dart@v1
         with:
-          ruby-version: 2.7
+          sdk: stable
 
-      - name: Install dependencies
-        run: bundle install
+      - name: Get dependencies
+        run: flutter pub get
 
       - name: Run tests
-        run: bundle exec rspec
+        run: flutter test --coverage
 
       - name: Setup CodeClimate Test Reporter
         run: |
