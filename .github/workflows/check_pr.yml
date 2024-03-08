@@ -22,19 +22,14 @@ jobs:
       - name: Run Tests with Coverage
         run: flutter test --coverage
 
-      - name: Install lcov
-        run: sudo apt-get install lcov  
-
-      - name: Generate HTML Coverage Report
-        run: |
-          lcov --remove coverage/lcov.info '**/flutter/**' -o coverage/lcov.info
-          genhtml -o coverage/html coverage/lcov.info  
-
-      - name: Add Coverage Report Link to PR
-        uses: marocchino/sticky-pull-request-comment@v2
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v2
         with:
-          message: "Coverage report: [View Coverage Report](URL_DO_SEU_RELATORIO)"
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}    
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./coverage/lcov.info
+          flags: unittests
+          name: codecov-umbrella
+          fail_ci_if_error: true
 
       - name: Analyze Code
         run: flutter analyze
