@@ -30,6 +30,12 @@ jobs:
           lcov --remove coverage/lcov.info '**/flutter/**' -o coverage/lcov.info
           genhtml -o coverage/html coverage/lcov.info  
 
+      - name: Add Coverage Report Link to PR
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          message: "Coverage report: [View Coverage Report](URL_DO_SEU_RELATORIO)"
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}    
+
       - name: Analyze Code
         run: flutter analyze
 
