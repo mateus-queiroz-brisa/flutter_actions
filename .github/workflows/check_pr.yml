@@ -31,7 +31,7 @@ jobs:
       - name: Report code coverage
         uses: kefasjw/lcov-pull-request-report@v1
         with:
-          lcov-file: coverage/lcov.*.info
+          lcov-file: coverage/lcov.info
           github-token: ${{ secrets.GITHUB_TOKEN }}
           working-directory: lib/
           comment-title: Code Coverage Report
