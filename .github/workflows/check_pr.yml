@@ -9,7 +9,8 @@ permissions:
   pull-requests: write
 
 jobs:
- checkout_and_test:
+  checkout:
+    name: 'Checkout'
     runs-on: ubuntu-latest
     steps:
 
@@ -22,6 +23,21 @@ jobs:
       - name: Install Dependencies
         run: flutter pub get
 
+  analyze:
+    name: 'Analyze'
+    needs: checkout
+    runs-on: ubuntu-latest
+    steps:
+      
+      - name: Analyze Code
+        run: flutter analyze
+
+  test:
+    name: 'Test'
+    needs: checkout
+    runs-on: ubuntu-latest
+    steps:
+      
       - name: Run Tests with Coverage
         run: flutter test --coverage
 
@@ -33,14 +49,17 @@ jobs:
         with:
           lcov-file: coverage/lcov.info
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          # working-directory: lib
           comment-title: Code Coverage Report
           all-files-minimum-coverage: 95
           changed-files-minimum-coverage: 95
           artifact-name:  code-coverage
-
-      - name: Analyze Code
-        run: flutter analyze
-
+  
+  format:
+    name: 'Format'
+    needs: checkout
+    runs-on: ubuntu-latest
+    steps:
+      
       - name: Format Code
         run: dart format --output=none --set-exit-if-changed .  
+    
