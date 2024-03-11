@@ -33,7 +33,7 @@ jobs:
         with:
           lcov-file: coverage/lcov.info
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          working-directory: lib
+          # working-directory: lib
           comment-title: Code Coverage Report
           all-files-minimum-coverage: 80
           changed-files-minimum-coverage: 80
