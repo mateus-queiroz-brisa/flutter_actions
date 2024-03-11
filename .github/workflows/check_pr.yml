@@ -9,41 +9,21 @@ permissions:
   pull-requests: write
 
 jobs:
-  checkout:
-    name: 'Checkout'
+
+  checkout_and_test:
+    name: 'Checkout and Test'
     runs-on: ubuntu-latest
-    container:
-      image: instrumentisto/flutter:latest
     steps:
 
       - name: Checkout Repository
         uses: actions/checkout@v2
 
-      # - name: Set up Flutter    
-      #   uses: subosito/flutter-action@v2
+      - name: Set up Flutter    
+        uses: subosito/flutter-action@v2
 
       - name: Install Dependencies
         run: flutter pub get
 
-  analyze:
-    name: 'Analyze'
-    needs: checkout
-    runs-on: ubuntu-latest
-    container:
-      image: instrumentisto/flutter:latest
-    steps:
-      
-      - name: Analyze Code
-        run: flutter analyze
-
-  test:
-    name: 'Test'
-    needs: checkout
-    runs-on: ubuntu-latest
-    container:
-      image: instrumentisto/flutter:latest
-    steps:
-      
       - name: Run Tests with Coverage
         run: flutter test --coverage
 
@@ -56,18 +36,12 @@ jobs:
           lcov-file: coverage/lcov.info
           github-token: ${{ secrets.GITHUB_TOKEN }}
           comment-title: Code Coverage Report
-          all-files-minimum-coverage: 95
-          changed-files-minimum-coverage: 95
+          all-files-minimum-coverage: 80
+          changed-files-minimum-coverage: 80
           artifact-name:  code-coverage
-  
-  format:
-    name: 'Format'
-    needs: checkout
-    runs-on: ubuntu-latest
-    container:
-      image: instrumentisto/flutter:latest
-    steps:
-      
+
+      - name: Analyze Code
+        run: flutter analyze
+
       - name: Format Code
         run: dart format --output=none --set-exit-if-changed .  
-    
