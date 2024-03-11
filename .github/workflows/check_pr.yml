@@ -13,7 +13,7 @@ jobs:
     name: 'Checkout'
     runs-on: ubuntu-latest
     container:
-      image: cirrusci/flutter:latest
+      image: instrumentisto/flutter:latest
     steps:
 
       - name: Checkout Repository
@@ -30,7 +30,7 @@ jobs:
     needs: checkout
     runs-on: ubuntu-latest
     container:
-      image: cirrusci/flutter:latest
+      image: instrumentisto/flutter:latest
     steps:
       
       - name: Analyze Code
@@ -41,7 +41,7 @@ jobs:
     needs: checkout
     runs-on: ubuntu-latest
     container:
-      image: cirrusci/flutter:latest
+      image: instrumentisto/flutter:latest
     steps:
       
       - name: Run Tests with Coverage
@@ -65,7 +65,7 @@ jobs:
     needs: checkout
     runs-on: ubuntu-latest
     container:
-      image: cirrusci/flutter:latest
+      image: instrumentisto/flutter:latest
     steps:
       
       - name: Format Code
