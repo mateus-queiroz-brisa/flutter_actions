@@ -35,8 +35,8 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           # working-directory: lib
           comment-title: Code Coverage Report
-          all-files-minimum-coverage: 80
-          changed-files-minimum-coverage: 80
+          all-files-minimum-coverage: 95
+          changed-files-minimum-coverage: 95
           artifact-name:  code-coverage
 
       - name: Analyze Code
