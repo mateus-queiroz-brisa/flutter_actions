@@ -12,6 +12,8 @@ jobs:
   checkout:
     name: 'Checkout'
     runs-on: ubuntu-latest
+    container:
+      image: google/dart:latest
     steps:
 
       - name: Checkout Repository
