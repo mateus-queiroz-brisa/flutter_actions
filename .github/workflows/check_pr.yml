@@ -10,13 +10,15 @@ permissions:
 
 jobs:
 
-  checkout_and_test:
-    name: 'Checkout and Test'
+  checkout:
+    name: 'Checkout'
+    uses: ./.github/workflows/flutter_setup.yml
+
+  test:
+    name: 'Test'
+    needs: 'checkout'
     runs-on: ubuntu-latest
     steps:
-
-      - name: Set Up Flutter
-        uses: ./.github/workflows/flutter_setup.yml
 
       - name: Run Tests with Coverage
         run: flutter test --coverage
